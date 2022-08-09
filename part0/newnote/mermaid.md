@@ -13,6 +13,6 @@ sequenceDiagram
     Note left of Browser: Browser starts executing JavaScript in main.js
     Browser->>Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
     Server-->>Browser: data.json
-    Browser->>Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/favicon.ico
+    Browser->>Server: HTTP GET https://studies.cs.helsinki.fi/favicon.ico
     Server-->>Browser: HTML Code
 ```
