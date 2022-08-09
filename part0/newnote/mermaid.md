@@ -14,4 +14,5 @@ sequenceDiagram
     Browser->>Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
     Server-->>Browser: data.json
     Browser->>Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/favicon.ico
+    Server-->>Browser: HTML Code
 ```
