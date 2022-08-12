@@ -11,11 +11,16 @@ const Part = (props) => {
 }
 
 const Content = (props) => {
+  console.log(props)
   return (
     <div>
-      <Part part={props.parts.one} count={props.counts.one} />
-      <Part part={props.parts.two} count={props.counts.two} />
-      <Part part={props.parts.three} count={props.counts.three} />
+      { 
+        props.parts.map((prop) => {
+          return (
+            <Part part={prop.name} count={prop.exercises} />
+          )
+        })
+      }
     </div>
   )
 }
@@ -27,22 +32,55 @@ const Total = (props) => {
 }
 
 const App = () => {
+
   const course = 'Half Stack application development'
-  const part1 = 'Fundamentals of React'
-  const exercises1 = 10
-  const part2 = 'Using props to pass data'
-  const exercises2 = 7
-  const part3 = 'State of a component'
-  const exercises3 = 14
+
+  const part1 = {
+    name: 'Fundamentals of React',
+    exercises: 10
+  }
+  const part2 = {
+    name: 'Using props to pass data',
+    exercises: 7
+  }
+  const part3 = {
+    name: 'State of a component',
+    exercises: 14
+  }
 
   return (
     <div>
       <Header coursename={course} />
-      <Content  parts={{"one": part1, "two": part2, "three": part3}}
-                counts={{"one":exercises1,"two":exercises2,"three":exercises3}} />
-      <Total count={exercises1 + exercises2 + exercises3} />
+      <Content  parts={[part1, part2, part3]}/>
+      <Total count={part1.exercises + part2.exercises + part3.exercises} />
     </div>
   )
+
+  /*
+    const App = () => {
+      const course = 'Half Stack application development'
+      const part1 = {
+        name: 'Fundamentals of React',
+        exercises: 10
+      }
+      const part2 = {
+        name: 'Using props to pass data',
+        exercises: 7
+      }
+      const part3 = {
+        name: 'State of a component',
+        exercises: 14
+      }
+
+      return (
+        <div>
+          ...
+        </div>
+      )
+    }
+   */
+  
+
 }
 
 export default App
