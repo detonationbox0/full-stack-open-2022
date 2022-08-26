@@ -7,8 +7,8 @@ const Button = ({onClick, name}) =>
   <button onClick={onClick}>{name}</button>
 
 
-const Count = ({quality, count}) =>
-  <p>{quality} {count}</p>
+const Stat = ({name, stat}) =>
+  <p>{name} {stat || "-"}</p>
 
 const App = () => {
   // save clicks of each button to its own state
@@ -20,6 +20,8 @@ const App = () => {
   const neutralVote = () => setNeutral(neutral + 1)
   const badVote = () => setBad(bad + 1)
 
+  const all = (good + neutral + bad)
+
   return (
     <div>
       <Heading title={"give feedback"} />
@@ -27,9 +29,12 @@ const App = () => {
       <Button name={"neutral"} onClick={neutralVote} />
       <Button name={"bad"} onClick={badVote}/>
       <Heading title={"statistics"} />
-      <Count quality={"good"} count={good} />
-      <Count quality={"neutral"} count={neutral} />
-      <Count quality={"bad"} count={bad} />
+      <Stat name={"good"} stat={good} />
+      <Stat name={"neutral"} stat={neutral} />
+      <Stat name={"bad"} stat={bad} />
+      <Stat name={"all"} stat={all} />
+      <Stat name={"average"} stat={((good * 1) + (bad * -1)) / (all)} />
+      <Stat name={"positive"} stat={(((good / all) || "-") + "%")} />
     </div>
   )
 }
