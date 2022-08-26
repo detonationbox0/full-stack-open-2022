@@ -10,6 +10,15 @@ const Button = ({onClick, name}) =>
 const Stat = ({name, stat}) =>
   <p>{name} {stat || "-"}</p>
 
+const Statistics = (props) => {
+  props.stats.forEach((stat) => {
+    console.log(stat)
+    return (
+      <Stat name={stat.name} stat={stat.value} />
+    )
+  })
+}
+
 const App = () => {
   // save clicks of each button to its own state
   const [good, setGood] = useState(0)
@@ -21,6 +30,17 @@ const App = () => {
   const badVote = () => setBad(bad + 1)
 
   const all = (good + neutral + bad)
+  const average = ((good * 1) + (bad * -1)) / (all)
+  const percent = (((good / all) || "-") + "%")
+
+  const statistics = [
+    { name: "good", value: good },
+    { name: "neutral", value: neutral },
+    { name: "bad", value: bad },
+    { name: "all", value: all },
+    { name: "average", value: average },
+    { name: "percent", value: percent },
+  ] 
 
   return (
     <div>
@@ -29,12 +49,7 @@ const App = () => {
       <Button name={"neutral"} onClick={neutralVote} />
       <Button name={"bad"} onClick={badVote}/>
       <Heading title={"statistics"} />
-      <Stat name={"good"} stat={good} />
-      <Stat name={"neutral"} stat={neutral} />
-      <Stat name={"bad"} stat={bad} />
-      <Stat name={"all"} stat={all} />
-      <Stat name={"average"} stat={((good * 1) + (bad * -1)) / (all)} />
-      <Stat name={"positive"} stat={(((good / all) || "-") + "%")} />
+      <Statistics stats={statistics} />
     </div>
   )
 }
