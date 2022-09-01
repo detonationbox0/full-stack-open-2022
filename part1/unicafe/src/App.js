@@ -8,8 +8,15 @@ const Heading = ({title}) =>
 const Button = ({onClick, name}) =>
   <button onClick={onClick}>{name}</button>
 
-const StatisticLine = ({text, value}) =>
-  <p>{text} {value || "-"}</p>
+const StatisticLine = ({text, value}) => {
+  return(
+  <tr>
+    <td>{text}</td>
+    <td>{value}</td>
+  </tr>
+  )
+}
+  
 
 const Statistics = ({good, neutral, bad}) => {
 
@@ -17,21 +24,31 @@ const Statistics = ({good, neutral, bad}) => {
   const all = good + neutral + bad
 
   // Only if all is 0, no feedback given
-  if (!all) return <StatisticLine text={"No feedback given"} value={" "} />
+  if (!all) {
+    return (
+      <table>
+        <tbody>
+          <StatisticLine text={"No feedback given"} value={" "} />
+        </tbody>
+      </table>
+    )
+  }
 
   // Statistical math
   const average = ((good * 1) + (bad * -1)) / (all)
-  const percent = (((good / all) || "-") + "%")
+  const percent = (((good / all) * 100 || "-") + "%")
 
   return (
-    <div>
-      <StatisticLine text={"good"} value={good} />
-      <StatisticLine text={"neutral"} value={neutral} />
-      <StatisticLine text={"bad"} value={bad} />
-      <StatisticLine text={"all"} value={all} />
-      <StatisticLine text={"average"} value={average} />
-      <StatisticLine text={"percent"} value={percent} />
-    </div>
+    <table>
+      <tbody>
+        <StatisticLine text={"good"} value={good} />
+        <StatisticLine text={"neutral"} value={neutral} />
+        <StatisticLine text={"bad"} value={bad} />
+        <StatisticLine text={"all"} value={all} />
+        <StatisticLine text={"average"} value={average} />
+        <StatisticLine text={"percent"} value={percent} />
+      </tbody>
+    </table>
   )
 
 }
