@@ -3,27 +3,36 @@ import { useState } from 'react'
 const Heading = ({title}) =>
   <h2>{title}</h2> 
 
+// I think this is what is meant by
+// "*Button* for defining the buttons used for submitting feedback"
 const Button = ({onClick, name}) =>
   <button onClick={onClick}>{name}</button>
 
+const StatisticLine = ({text, value}) =>
+  <p>{text} {value || "-"}</p>
 
-const Stat = ({name, stat}) =>
-  <p>{name} {stat || "-"}</p>
+const Statistics = ({good, neutral, bad}) => {
 
-const Statistics = ({stats}) => {
-  if (stats.length === 0) {
-    // All states are 0, no feedback has been given
-    return (<Stat name={"No feedback given"} stat={" "} />)
-  }
+  // Sum
+  const all = good + neutral + bad
 
-  // Will contain a <Stat /> for each statistic in stats array
-  const statContainer = [];
-  stats.forEach((stat) => { // For each statistic in stats
-    // Add a new Stat component
-    statContainer.push(<Stat name={stat.name} stat={stat.value} />)
-  });
+  // Only if all is 0, no feedback given
+  if (!all) return <StatisticLine text={"No feedback given"} value={" "} />
 
-  return statContainer
+  // Statistical math
+  const average = ((good * 1) + (bad * -1)) / (all)
+  const percent = (((good / all) || "-") + "%")
+
+  return (
+    <div>
+      <StatisticLine text={"good"} value={good} />
+      <StatisticLine text={"neutral"} value={neutral} />
+      <StatisticLine text={"bad"} value={bad} />
+      <StatisticLine text={"all"} value={all} />
+      <StatisticLine text={"average"} value={average} />
+      <StatisticLine text={"percent"} value={percent} />
+    </div>
+  )
 
 }
 
@@ -34,35 +43,10 @@ const App = () => {
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
 
-  // declare onclick functions for <Button /> components
+  // onclick functions for <Button /> components
   const goodVote = () => setGood(good + 1)
   const neutralVote = () => setNeutral(neutral + 1)
   const badVote = () => setBad(bad + 1)
-
-  // Perform statistical math
-  const all = (good + neutral + bad)
-  const average = ((good * 1) + (bad * -1)) / (all)
-  const percent = (((good / all) || "-") + "%")
-
-  // Array containing statistics to be displayed
-  let statistics;
-
-  if (good === 0 && neutral === 0 && bad === 0) {
-    // Initial states are 0
-    // Empty array will display as "No feedback given"
-    statistics = []
-  } else {
-    // Statistics to be displayed
-    statistics = [
-      { name: "good", value: good },
-      { name: "neutral", value: neutral },
-      { name: "bad", value: bad },
-      { name: "all", value: all },
-      { name: "average", value: average },
-      { name: "percent", value: percent },
-    ]   
-  }
-
 
   return (
     <div>
@@ -71,7 +55,7 @@ const App = () => {
       <Button name={"neutral"} onClick={neutralVote} />
       <Button name={"bad"} onClick={badVote}/>
       <Heading title={"statistics"} />
-      <Statistics stats={statistics} />
+      <Statistics good={good} neutral={neutral} bad={bad} />
     </div>
   )
 }
