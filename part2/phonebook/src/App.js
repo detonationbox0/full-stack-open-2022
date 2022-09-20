@@ -7,17 +7,26 @@ const App = () => {
   const [newName, setNewName] = useState('')
 
   const newNameChange = (event) => {
+    // Handle onChange to prevent static element
     setNewName(event.target.value)
   }
 
   const addPerson = (event) => {
-    event.preventDefault()
+    event.preventDefault() // Remove default behavior
 
-    setPersons(persons.concat({
-      name: newName
-    }))
+    // Returns -1 if not in array
+    const isThere = persons.findIndex((thisPerson) => thisPerson.name === newName);
+    
+    if (isThere < 0) { 
+      // The person is not in the phonebook, add them
+      setPersons(persons.concat({ name: newName }))
+    } else {
+      alert(`${newName} is already added to the phonebook`);
+      // Prevent resetting the newName label
+      return;
+    }
+    setNewName("");
 
-    console.log(persons)
   }
 
   return (
