@@ -2,43 +2,54 @@ import { useState } from 'react'
 
 const App = () => {
 
+  // App States
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas' }
+    { id: 1, name: 'Arto Hellas', phone:'(123) 456-7890' }
   ])
-  
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
 
+  // When user is typing into the Name input,
+  // update the state
   const handleNameChange = (event) => {
     setNewName(event.target.value)
   }
 
+  // When user is typing into the Phone input,
+  // update the state
   const handlePhoneChange = (event) => {
     setNewPhone(event.target.value)
   }
 
+  // "Submit" is clicked
   const addPerson = (event) => {
-    event.preventDefault()
+    event.preventDefault() // Ignore default form behavior
 
-    // How many of them are there?
-    const nameCheck = persons.filter(nameObj => nameObj.name === newName)
+    // Is this submission already present?
+    const nameCheck = persons.filter((nameObj) => {
+       return ( nameObj.name === newName
+                && nameObj.phone === newPhone )
+    })
     if (nameCheck.length > 0) { // Too many
+      // Alert for duplicate
       alert(`${newName} is already added to phonebook`)
-      return
-    }
+      return // Don't add the submission if it's a duplicate
+    } 
 
+    // Add the new submission to the "Persons" state
     setPersons(persons.concat({
-      name: newName
+      id: persons.length + 1,
+      name: newName,
+      phone: newPhone,
     }))
 
-    console.log(persons)
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
       <form onSubmit={addPerson}>
-
+        
         <div>
           name:
           <input  value={newName}
@@ -59,13 +70,14 @@ const App = () => {
       </form>
       <h2>Numbers</h2>
       <ul>
-        {persons.map((person) => {
-          return(
-            <li key={person.name}>{person.name}</li>
-          )
-        })} 
+        { // Iterate the persons array, populate list of names & numbers
+          persons.map((person) => {
+            return(
+              <li key={person.id}>{person.name} {person.phone}</li>
+            )
+          })
+        } 
       </ul>
-      <div>debug: {newPhone}</div>
     </div>
   )
 }
