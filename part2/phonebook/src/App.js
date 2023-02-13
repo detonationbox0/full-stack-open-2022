@@ -1,5 +1,10 @@
 import { useState } from 'react'
 
+// Components
+import Filter from './components/Filter'
+import PersonForm from './components/PersonForm'
+import Persons from './components/Persons'
+
 const App = () => {
 
     // App States
@@ -56,7 +61,7 @@ const App = () => {
              return ( nameObj.name === newName
                       && nameObj.phone === newPhone )
         })
-        
+
         if (nameCheck.length > 0) { // Too many
             // Alert for duplicate
             alert(`${newName} is already added to phonebook`)
@@ -78,45 +83,17 @@ const App = () => {
         <div>
             <h2>Phonebook</h2>
 
-                <div>
-                    filter:
-                    <input  value={filter}
-                            onChange={handleFilterChange}
-                    />
-                </div>
+            <Filter filter={filter}
+                    handleFilterChange={handleFilterChange}
+            />
 
-            <h2>Add a new</h2>
+            <PersonForm  states={[newName, newPhone]}
+                        handlers={[ addPerson,
+                                    handleNameChange,
+                                    handlePhoneChange ]} />
+            
+            <Persons persons={persons} />
 
-            <form onSubmit={addPerson}>
-                
-                <div>
-                    name:
-                    <input  value={newName}
-                            onChange={handleNameChange}
-                    />
-                </div>
-
-                <div>
-                    number:
-                    <input  value={newPhone}
-                            onChange={handlePhoneChange}
-                    />
-                </div>
-
-                <div>
-                    <button type="submit">add</button>
-                </div>
-            </form>
-            <h2>Numbers</h2>
-            <ul>
-                { // Iterate the persons array, populate list of names & numbers
-                    persons.map((person) => (
-                      person.visible
-                      ? <li key={person.id}>{person.name} {person.phone}</li>
-                      : null 
-                    ))
-                } 
-            </ul>
         </div>
     )
 }
