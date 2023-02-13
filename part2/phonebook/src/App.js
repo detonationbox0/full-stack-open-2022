@@ -56,6 +56,7 @@ const App = () => {
              return ( nameObj.name === newName
                       && nameObj.phone === newPhone )
         })
+        
         if (nameCheck.length > 0) { // Too many
             // Alert for duplicate
             alert(`${newName} is already added to phonebook`)
@@ -109,13 +110,11 @@ const App = () => {
             <h2>Numbers</h2>
             <ul>
                 { // Iterate the persons array, populate list of names & numbers
-                    persons.map((person) => {
-                        if (person.visible === true) {
-                            return(
-                                <li key={person.id}>{person.name} {person.phone}</li>
-                            )
-                        }
-                    })
+                    persons.map((person) => (
+                      person.visible
+                      ? <li key={person.id}>{person.name} {person.phone}</li>
+                      : null 
+                    ))
                 } 
             </ul>
         </div>
