@@ -1,21 +1,39 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 
 // Components
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 
+
 const App = () => {
 
     // App States
-    const [persons, setPersons] = useState([
-        { id: 1, name: 'Arto Hellas', phone:'(123) 456-7890', visible: true },
-        { id: 2, name: 'Todd Morris', phone:'(222) 222-2222', visible: true },
-        { id: 3, name: 'Ada Lovelace', phone:'(111) 444-3333', visible: true }
-    ])
+    const [persons, setPersons] = useState([])
     const [newName, setNewName] = useState('')
-    const [newPhone, setNewPhone] = useState('')
+    const [newNumber, setnewNumber] = useState('')
     const [filter, setFilter] = useState('')
+
+    const getPersons = () => {
+        // Get the people data from localhost:3001/persons
+        axios.get("http://localhost:3001/persons")
+        // On response...
+        .then(response => {
+            // Set state of persons
+            setPersons(
+                // Add visible property so filter works
+                response.data.map(person => {
+                    person.visible = true
+                    return person
+                })
+            )
+        })
+    }
+
+    // After first render, fetch persons data
+    // apply to persons state    
+    useEffect(getPersons, [])
 
     // When user is typing into the Name input,
     // update the state
@@ -26,7 +44,7 @@ const App = () => {
     // When user is typing into the Phone input,
     // update the state
     const handlePhoneChange = (event) => {
-        setNewPhone(event.target.value)
+        setnewNumber(event.target.value)
     }
 
     // When user is typing into the Filter input,
@@ -41,7 +59,7 @@ const App = () => {
         const filterPersons = persons.map((obj) => {
 
             obj.name.toLowerCase().includes(filterValue)
-            || obj.phone.toLowerCase().includes(filterValue)
+            || obj.number.toLowerCase().includes(filterValue)
             ? obj.visible = true : obj.visible = false
             
             return obj
@@ -59,7 +77,7 @@ const App = () => {
         // Is this submission already present?
         const nameCheck = persons.filter((nameObj) => {
              return ( nameObj.name === newName
-                      && nameObj.phone === newPhone )
+                      && nameObj.number === newNumber )
         })
 
         if (nameCheck.length > 0) { // Too many
@@ -72,7 +90,7 @@ const App = () => {
         setPersons(persons.concat({
             id: persons.length + 1,
             name: newName,
-            phone: newPhone,
+            phone: newNumber,
             visible:true
         }))
 
@@ -87,7 +105,7 @@ const App = () => {
                     handleFilterChange={handleFilterChange}
             />
 
-            <PersonForm  states={[newName, newPhone]}
+            <PersonForm  states={[newName, newNumber]}
                         handlers={[ addPerson,
                                     handleNameChange,
                                     handlePhoneChange ]} />

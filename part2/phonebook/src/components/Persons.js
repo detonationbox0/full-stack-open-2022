@@ -6,7 +6,7 @@ const Persons = ({persons}) => {
                 { // Iterate the persons array, populate list of names & numbers
                     persons.map((person) => (
                         person.visible
-                        ? <li key={person.id}>{person.name} {person.phone}</li>
+                        ? <li key={person.id}>{person.name} {person.number}</li>
                         : null 
                     ))
                 } 
