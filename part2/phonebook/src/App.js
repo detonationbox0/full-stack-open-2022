@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import phoneService from './services/phones'
 
 // Components
 import Filter from './components/Filter'
@@ -12,23 +12,23 @@ const App = () => {
     // App States
     const [persons, setPersons] = useState([])
     const [newName, setNewName] = useState('')
-    const [newNumber, setnewNumber] = useState('')
+    const [newNumber, setNewNumber] = useState('')
     const [filter, setFilter] = useState('')
 
     const getPersons = () => {
-        // Get the people data from localhost:3001/persons
-        axios.get("http://localhost:3001/persons")
-        // On response...
-        .then(response => {
-            // Set state of persons
+
+        // Use phones.js's getAll() function to get
+        // all of the phones in db.json using axios
+        phoneService.getAll().then(phoneData => {
             setPersons(
                 // Add visible property so filter works
-                response.data.map(person => {
+                phoneData.map(person => {
                     person.visible = true
                     return person
                 })
             )
         })
+        
     }
 
     // After first render, fetch persons data
@@ -44,7 +44,7 @@ const App = () => {
     // When user is typing into the Phone input,
     // update the state
     const handlePhoneChange = (event) => {
-        setnewNumber(event.target.value)
+        setNewNumber(event.target.value)
     }
 
     // When user is typing into the Filter input,
@@ -71,8 +71,9 @@ const App = () => {
     }
 
     // "Submit" is clicked
-    const addPerson = (event) => {
+    const addPerson = (event, id) => {
         event.preventDefault() // Ignore default form behavior
+
 
         // Is this submission already present?
         const nameCheck = persons.filter((nameObj) => {
@@ -84,15 +85,35 @@ const App = () => {
             // Alert for duplicate
             alert(`${newName} is already added to phonebook`)
             return // Don't add the submission if it's a duplicate
-        } 
+        }
 
-        // Add the new submission to the "Persons" state
-        setPersons(persons.concat({
+        // New object to be added
+        const newPerson = {
             id: persons.length + 1,
             name: newName,
             phone: newNumber,
             visible:true
-        }))
+        }
+
+        // Add the person and number to the database
+        console.log("Adding ", newPerson)
+        phoneService
+            .addNumber(newPerson)
+            .then(response => {
+                console.log(returnedPerson);
+                // Crazy forumla to create array with old data,
+                // and data from the response
+                setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
+            })
+
+
+        // Add the new submission to the "Persons" state
+        // setPersons(persons.concat({
+        //     id: persons.length + 1,
+        //     name: newName,
+        //     phone: newNumber,
+        //     visible:true
+        // }))
 
     }
 
