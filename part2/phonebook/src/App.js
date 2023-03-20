@@ -30,7 +30,7 @@ const App = () => {
         })
         
     }
-
+    
     // After first render, fetch persons data
     // apply to persons state    
     useEffect(getPersons, [])
@@ -71,9 +71,8 @@ const App = () => {
     }
 
     // "Submit" is clicked
-    const addPerson = (event, id) => {
+    const addPerson = (event) => {
         event.preventDefault() // Ignore default form behavior
-
 
         // Is this submission already present?
         const nameCheck = persons.filter((nameObj) => {
@@ -89,9 +88,8 @@ const App = () => {
 
         // New object to be added
         const newPerson = {
-            id: persons.length + 1,
             name: newName,
-            phone: newNumber,
+            number: newNumber,
             visible:true
         }
 
@@ -99,21 +97,12 @@ const App = () => {
         console.log("Adding ", newPerson)
         phoneService
             .addNumber(newPerson)
-            .then(response => {
-                console.log(returnedPerson);
-                // Crazy forumla to create array with old data,
-                // and data from the response
-                setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
+            .then((returnedPerson) => {
+                // set the state of persons to persons + returnedPerson
+                const newPersons = persons.concat(returnedPerson)
+                setPersons(newPersons)
             })
 
-
-        // Add the new submission to the "Persons" state
-        // setPersons(persons.concat({
-        //     id: persons.length + 1,
-        //     name: newName,
-        //     phone: newNumber,
-        //     visible:true
-        // }))
 
     }
 

@@ -1,7 +1,7 @@
 const PersonForm = ({states, handlers}) => {
 
     // load states
-    const [newName, newPhone] = states
+    const [newName, newNumber] = states
     
     // load event handlers
     const [addPerson, handleNameChange, handlePhoneChange] = handlers
@@ -19,7 +19,7 @@ const PersonForm = ({states, handlers}) => {
 
                 <div>
                     number:
-                    <input  value={newPhone}
+                    <input  value={newNumber}
                             onChange={handlePhoneChange}
                     />
                 </div>
